@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Todos os Produtos</h2>
+{% for product in all_products %}
+<div class="card" style="width: 18rem;">
+  <img src="{{ product.imagem_url }}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ product.nome }}</h5>
+    <p class="card-text">{{ product.descricao }}</p>
+    <p class="card-text">Quantidade em estoque: {{ product.quantidade }}</p>
+    <p class="card-text">Tamanho: {{ product.tamanho }}</p>
+    <p class="card-text"> R$ {{ product.valor }}</p>
+    <a href="#" class="btn btn-primary"><i class="fa-solid fa-cart-shopping"></i> Adicionar ao carrinho</a>
+  </div>
+</div>
+{% empty %}
+    <li>No articles yet.</li>
+{% endfor %}
+</ul>
+{% endblock %}

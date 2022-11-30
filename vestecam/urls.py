@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+import cart
 urlpatterns = [
-    path('', include('staticpages.urls')),
+    path('', include('staticpages.urls'), name='home'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('products/', include('products.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('cart/', include('cart.urls')),
+    path('process_payment', cart.views.process_payment, name='process_payment'),
 ]

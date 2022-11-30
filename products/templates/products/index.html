@@ -21,7 +21,7 @@
     <p class="card-text"> R$ {{ product.valor }}</p>
     {% endif %}
     {% if product.ativo %}
-    <a href="#" class="btn btn-primary"><i class="fa-solid fa-cart-shopping"></i> Adicionar ao carrinho</a>
+    <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary"><i class="fa-solid fa-cart-shopping"></i> Adicionar ao carrinho</a>
     {% else %}
     <a href="#" class="btn btn-primary disabled">Indisponível</a>
     {% endif %}

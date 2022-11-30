@@ -1,8 +1,8 @@
 from django.shortcuts import render
-
+from cart.cart import Cart
 
 def index(request):
-    context = {}
+    context = {'cart': Cart(request)}
     return render(request, 'staticpages/index.html', context)
 
 

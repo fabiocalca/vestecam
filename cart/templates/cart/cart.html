@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+Carrinho
+{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>Quantidade</th>
+            <th>Remover</th>
+        </tr>
+        <tr>
+            {% for item in cart %}
+                <td>{{ item.product.nome }}</td>
+                {% if item.product.desconto %}
+                    <td>{{ item.product.valor_com_desconto }}</td>
+                {% else %}
+                    <td>{{ item.product.valor }}</td>
+                {% endif %}
+                    <td><a href="{% url 'cart:remove_from_cart' item.product.id %}">Remover</a></td>
+                {% empty %}
+                <li>No momento não temos nenhum produto disponível.</li>
+            {% endfor %}
+        </tr>
+        <li>Total: R$ {% if cart.summary == None %} 0,00 {% else %} {{ cart.summary }} {% endif %}</li>
+    </table>
+    <a href="{% url 'cart:generate_payment' %}">Finalizar</a>
+{% endblock %}

@@ -15,14 +15,14 @@ class ProductListView(ListView):
 class ProductUpdateView(UpdateView):
   model = Product
   fields = ['nome', 'descricao', 'imagem_url', 'valor', 'valor_com_desconto', 'desconto', 'ativo', 'quantidade', 'tamanho']
-  success_url = "/products"
+  success_url = "/products/"
 
 class ProductDeleteView(DeleteView):
   model = Product
-  success_url ="/products"
+  success_url ="/products/"
   template_name = "products/delete_confirm.html"
   
 class ProductCreateView(CreateView):
   model = Product
   fields = ['nome', 'descricao', 'imagem_url', 'valor', 'valor_com_desconto', 'desconto', 'ativo', 'quantidade', 'tamanho']
-  success_url = "/products"
+  success_url = "/products/"

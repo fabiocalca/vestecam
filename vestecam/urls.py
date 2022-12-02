@@ -23,5 +23,6 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart/', include('cart.urls')),
+    path('orders/', include('orders.urls')),
     path('process_payment', cart.views.process_payment, name='process_payment'),
 ]

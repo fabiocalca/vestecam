@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 import mercadopago
 from django.views.decorators.csrf import csrf_exempt
-
-
+from . import models
+from django.contrib.auth.models import User
 import json
 def add_to_cart(request, pk):
     product = Product.objects.get(id=pk)
@@ -18,7 +18,7 @@ def add_to_cart(request, pk):
         valor = product.valor
     cart.add(product, valor, quantity=1)
     print(cart.summary())
-    return HttpResponseRedirect(reverse('cart:cart'))
+    return HttpResponseRedirect(reverse('products:index'))
 
 def remove_from_cart(request, pk):
     product = Product.objects.get(id=pk)
@@ -34,6 +34,7 @@ def generate_payment(request):
 
 @csrf_exempt
 def process_payment(request):
+    
     sdk = mercadopago.SDK("APP_USR-2180497889937881-112909-4d49264e0c5960400250cb46b4c39a4e-1125665108")
     request_values = json.loads(request.body)
     payment_data = {
@@ -57,7 +58,12 @@ def process_payment(request):
     print("status =>", payment["status"])
     print("status_detail =>", payment["status_detail"])
     print("id =>", payment["id"])
-    if payment["id"] == "approved":
-        Cart(request).clear()
-        return HttpResponseRedirect(reverse('cart:cart'))
+    items = ''
+    for i in Cart(request):
+        items += (str(i.quantity) + 'x ' + str(i.product.nome) + '\n')
+    user_id = request.user.id
+    valor = Cart(request).summary()
+    order_obj = models.Order(buyer=User.objects.get(id=user_id), valor=valor, items=items)
+    order_obj.save()
+    Cart(request).new(request)
     return render(request, 'cart/cart.html', {'cart': Cart(request)})

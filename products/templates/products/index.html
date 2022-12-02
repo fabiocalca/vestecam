@@ -26,8 +26,8 @@
     <a href="#" class="btn btn-primary disabled">Indisponível</a>
     {% endif %}
     {% if user.is_staff %}
-      <a href="{% url 'products:delete' product.id %}"><i class="fa-solid fa-trash"></i></a>
-      <a href="{% url 'products:update' product.id %}"><i class="fa-solid fa-pencil"></i></a>
+      <a class="btn btn-outline-danger btn-sm" href="{% url 'products:delete' product.id %}"><i class="fa-solid fa-trash"></i></a>
+      <a class="btn btn-outline-success btn-sm" href="{% url 'products:update' product.id %}"><i class="fa-solid fa-pencil"></i></a>
     {% endif %}
   </div>
 </div>

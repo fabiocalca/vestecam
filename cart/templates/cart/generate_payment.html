@@ -5,7 +5,7 @@ Pagamento
 {% endblock %}
 
 {% block content %}
-<h1>Valor total: {{ cart.summary }} </h1>
+<h2>Valor total: R$ {{ cart.summary|floatformat:2 }} </h1>
 <div id="cardPaymentBrick_container"></div>
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 <script>

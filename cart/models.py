@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
-
+from django.conf import settings
 class Cart(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('creation date'))
     checked_out = models.BooleanField(default=False, verbose_name=_('checked out'))
@@ -60,3 +60,12 @@ class Item(models.Model):
         self.object_id = product.pk
 
     product = property(get_product, set_product)
+
+class Order(models.Model):
+    id = models.IntegerField(primary_key=True)
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    items = models.TextField()
+    valor = models.DecimalField(max_digits=8, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    pago = models.BooleanField(default=True)
+    entregue = models.BooleanField(default=False)

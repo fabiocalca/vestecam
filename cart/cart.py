@@ -34,7 +34,7 @@ class Cart:
         request.session[CART_ID] = cart.id
         return cart
 
-    def add(self, product, unit_price, quantity=1):
+    def add(self, product, unit_price, quantity=1.0):
         item = models.Item.objects.filter(cart=self.cart, product=product).first()
         if item:
             item.unit_price = unit_price

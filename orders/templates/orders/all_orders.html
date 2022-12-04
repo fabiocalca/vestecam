@@ -11,6 +11,7 @@ Gerenciar Pedidos
     <tr>
       <th scope="col">#</th>
       <th scope="col">Comprador</th>
+      <th scope="col">Telefone</th>
       <th scope="col">Produtos</th>
       <th scope="col">Valor</th>
       <th scope="col">Data da compra</th>
@@ -22,13 +23,21 @@ Gerenciar Pedidos
     {% for order in orders %}
     <tr>
       <th scope="row">{{ order.id }}</th>
-      <td>{{ order.buyer.first_name }} {{ order.buyer.last_name }}</td>
+      <td>{{ order.payer_name }}</td>
+      <td>{{ order.payer_phone }}</td>
       <td>{{ order.items }}</td>
       <td>R$ {{ order.valor }}</td>
       <td>{{ order.timestamp }}</td>
-      <td>{% if not order.pago %}Não pago {% elif order.entregue %}Entregue {% else %} Pago {% endif %}</td>
+      <td>
+        {% if order.entregue %}Entregue
+        {% elif order.payment_status == "approved" %} Aprovado
+        {% elif order.payment_status == "expired" %}Pagamento expirado
+        {% else %} Não Pago
+        {% endif %}
+      </td>
       <td>
         <a class="btn btn-outline-success btn-sm" href="{% url 'orders:update' order.id %}"><i class="fa-solid fa-pencil"></i></a>
+        <a class="btn btn-outline-danger btn-sm" href="{% url 'orders:delete' order.id %}"><i class="fa-solid fa-trash"></i></a>
       </td>
     
     </tr>

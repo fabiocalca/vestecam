@@ -8,4 +8,5 @@ urlpatterns = [
   path('<pk>/remove_from_cart/', views.remove_from_cart, name = 'remove_from_cart'),
   path('', views.get_cart, name='cart'),
   path('generate_payment/', login_required(views.generate_payment), name='generate_payment'),
+  path('payment_method', login_required(views.payment_method), name='payment_method'),
 ]

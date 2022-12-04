@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from . import models
 from django.contrib.auth.models import User
 import json
+
 def add_to_cart(request, pk):
     product = Product.objects.get(id=pk)
     cart = Cart(request)
@@ -32,29 +33,41 @@ def get_cart(request):
 def generate_payment(request):
     return render(request, 'cart/generate_payment.html', {'cart': Cart(request)})
 
+def payment_method(request):
+    items = ''
+    for i in Cart(request):
+        items += (str(i.quantity) + 'x ' + str(i.product.nome) + '\n')
+    return render(request, 'cart/payment_method.html', {'cart': Cart(request), 'items': items})
+
 @csrf_exempt
 def process_payment(request):
-    
+
     sdk = mercadopago.SDK("APP_USR-2180497889937881-112909-4d49264e0c5960400250cb46b4c39a4e-1125665108")
-    request_values = json.loads(request.body)
     payment_data = {
-        "transaction_amount": float(request_values["transaction_amount"]),
-        "token": request_values["token"],
-        "installments": int(request_values["installments"]),
-        "payment_method_id": request_values["payment_method_id"],
-        "issuer_id": request_values["issuer_id"],
-        "payer": {
-            "email": request_values["payer"]["email"],
-            "identification": {
-                "type": request_values["payer"]["identification"]["type"], 
-                "number": request_values["payer"]["identification"]["number"]
-            }
+   "transaction_amount": float(request.POST.get("transactionAmount")),
+    "description": request.POST.get("productDescription"),
+    "payment_method_id": "pix",
+    "payer": {
+        "email": "test@test.com",
+        "first_name": request.POST.get("payerFirstName"),
+        "last_name": request.POST.get("payerLastName"),
+        "identification": {
+            "type": "CPF",
+            "number": request.POST.get("docNumber")
+        },
+        "address": {
+            "zip_code": "06233-200",
+            "street_name": "Av. das Nações Unidas",
+            "street_number": "3003",
+            "neighborhood": "Bonfim",
+            "city": "Osasco",
+            "federal_unit": "SP"
         }
     }
-
+}
+    
     payment_response = sdk.payment().create(payment_data)
     payment = payment_response["response"]
-
     print("status =>", payment["status"])
     print("status_detail =>", payment["status_detail"])
     print("id =>", payment["id"])
@@ -63,7 +76,8 @@ def process_payment(request):
         items += (str(i.quantity) + 'x ' + str(i.product.nome) + '\n')
     user_id = request.user.id
     valor = Cart(request).summary()
-    order_obj = models.Order(buyer=User.objects.get(id=user_id), valor=valor, items=items)
+    payment_link = payment["point_of_interaction"]["transaction_data"]["ticket_url"]
+    order_obj = models.Order(buyer=User.objects.get(id=user_id), payer_name=(request.POST.get("payerFirstName")), payer_phone=request.POST.get("payerPhone"), payment_id=payment["id"], payment_status=payment["status"], payment_link=payment_link, valor=valor, items=items)
     order_obj.save()
     Cart(request).new(request)
-    return render(request, 'cart/cart.html', {'cart': Cart(request)})
+    return render(request, 'cart/payment.html', {'payment': payment})

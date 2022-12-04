@@ -35,5 +35,5 @@ Carrinho
             <td>Total: R$ {% if cart.summary == None %} 0,00 {% else %} {{ cart.summary|floatformat:2 }} {% endif %}</td>
         </tbody>
     </table>
-    <a class="btn btn-primary" href="{% url 'cart:generate_payment' %}">Finalizar e ir para o pagamento</a>
+    <a class="btn btn-primary" href="{% url 'cart:payment_method' %}">Finalizar e ir para o pagamento</a>
 {% endblock %}

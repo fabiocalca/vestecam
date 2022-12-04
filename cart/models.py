@@ -63,9 +63,13 @@ class Item(models.Model):
 
 class Order(models.Model):
     id = models.IntegerField(primary_key=True)
+    payment_id = models.IntegerField()
+    payer_name = models.CharField(max_length=255)
+    payer_phone = models.CharField(max_length=18)
+    payment_status = models.CharField(max_length=255)
+    payment_link = models.URLField(max_length=200, null=True)
     buyer = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     items = models.TextField()
     valor = models.DecimalField(max_digits=8, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
-    pago = models.BooleanField(default=True)
     entregue = models.BooleanField(default=False)

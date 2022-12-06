@@ -5,5 +5,5 @@ Realizar pagamento
 {% block content %}
   <h2>Seu pedido foi realizado! Realize o seu pagamento por Pix em</h2>
   <a class="link" href="{{ payment.point_of_interaction.transaction_data.ticket_url }}"> {{ payment.point_of_interaction.transaction_data.ticket_url }} </a>
-  <a class="btn btn-primary" href="{% url 'orders:my_orders">Ir para Pedidos</a>
+  <a class="btn btn-primary" href="{% url 'orders:my_orders %}">Ir para Pedidos</a>
 {% endblock %}

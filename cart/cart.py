@@ -43,6 +43,7 @@ class Cart:
             Product.objects.filter(id=product.id).update(quantidade=F('quantidade')-1)
         else:
             models.Item.objects.create(cart=self.cart, product=product, unit_price=unit_price, quantity=quantity)
+            Product.objects.filter(id=product.id).update(quantidade=F('quantidade')-1)
 
     def remove(self, product):
         item = models.Item.objects.filter(cart=self.cart, product=product).first()

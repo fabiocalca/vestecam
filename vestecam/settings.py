@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'accounts.apps.AccountsConfig',
     'cart.apps.CartConfig',
-    'orders.apps.OrdersConfig'
+    'orders.apps.OrdersConfig',
+    'rest_framework',
+    'api.apps.ApiConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,8 +55,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 ROOT_URLCONF = 'vestecam.urls'
 
 TEMPLATES = [
